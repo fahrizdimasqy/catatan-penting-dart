@@ -265,3 +265,41 @@ proses asynchronous. Seperti yang kita tahu, penulisan kode asynchronous akan
 sedikit berbeda dengan proses synchronous. Contohnya program pesan kopi kita
 sebelumnya jika dituliskan secara asynchronous akan seperti berik
 menghasilkan nilai atau eror. Ini seperti blok finally pada try-catch-finally
+```dart
+void main() async {
+  print('Getting your order...');
+  try {
+    var order = await getOrder(); //mengembalikan objek future
+    print('You order: ');
+  } catch (error) {
+    print('Sorry. $error');
+  }
+}
+
+Future<String> getOrder() {
+  return Future.delayed(Duration(seconds: 3), () {
+    var isStockAvailable = false;
+    if (isStockAvailable) {
+      return 'cofee boba';
+    } else {
+      throw 'Our stock is not enough';
+    }
+    // return 'Coffe Boba';
+  });
+}
+```
+Output ini disebabkan karena fungsi main() masih merupakan fungsi synchronous. Untuk mengubahnya menjadi
+fungsi asynchronous tambahkan keyword async sebelum function body
+```dart
+void main() async { … }
+```
+Kemudian tambahkan keyword await sebelum fungsi yang mengembalikan
+nilai Future
+
+```dart
+var order = await getOrder();
+```
+Lalu bagaimana menangani ketika terjadi eror? Caranya cukup sederhana yaitu
+dengan memanfaatkan try-catch
+Begitu juga seperti yang telah disebutkan, method whenComplete() bisa digantikan
+dengan blok finally.
